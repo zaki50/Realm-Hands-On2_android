@@ -2,6 +2,8 @@ package io.realm.handson2.twitter;
 
 import android.app.Application;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import twitter4j.TwitterFactory;
 
 public class MyApplication extends Application {
@@ -15,5 +17,7 @@ public class MyApplication extends Application {
         TwitterFactory.getSingleton().setOAuthConsumer(
                 "<consumerKey>",
                 "<consumerSecret>");
+
+        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(this).build());
     }
 }
