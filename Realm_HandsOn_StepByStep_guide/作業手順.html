@@ -1,0 +1,1699 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #737373;
+    background-color: white;
+    margin: 10px 13px 10px 13px;
+}
+table {
+	margin: 10px 0 15px 0;
+	border-collapse: collapse;
+}
+td,th {	
+	border: 1px solid #ddd;
+	padding: 3px 10px;
+}
+th {
+	padding: 5px 10px;	
+}
+
+a {
+    color: #0069d6;
+}
+a:hover {
+    color: #0050a3;
+    text-decoration: none;
+}
+a img {
+    border: none;
+}
+p {
+    margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #404040;
+    line-height: 36px;
+}
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 13px;
+}
+hr {
+    margin: 0 0 19px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+blockquote {
+    padding: 13px 13px 21px 15px;
+    margin-bottom: 18px;
+    font-family:georgia,serif;
+    font-style: italic;
+}
+blockquote:before {
+    content:"\201C";
+    font-size:40px;
+    margin-left:-10px;
+    font-family:georgia,serif;
+    color:#eee;
+}
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 18px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+code, pre {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+    background-color: #fee9cc;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+    font-size: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+pre {
+    display: block;
+    padding: 14px;
+    margin: 0 0 18px;
+    line-height: 16px;
+    font-size: 11px;
+    border: 1px solid #d9d9d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre code {
+    background-color: #fff;
+    color:#737373;
+    font-size: 11px;
+    padding: 0;
+}
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:10px auto;
+    }
+}
+@media print {
+	body,code,pre code,h1,h2,h3,h4,h5,h6 {
+		color: black;
+	}
+	table, pre {
+		page-break-inside: avoid;
+	}
+}
+</style>
+<title>プロジェクトの作成</title>
+
+</head>
+<body>
+<p><a href="https://github.com/zaki50/Realm-Hands-On2_android">https://github.com/zaki50/Realm-Hands-On2_android</a> からコードがダウンロードできます。また、各見出しに対応したcommitがmasterブランチに存在するので、それぞれの部分までの途中経過も確認できます。</p>
+
+<h1>プロジェクトの作成</h1>
+
+<p>以下の設定でAndroid Studioから新規にプロジェクトを作成します。</p>
+
+<dl>
+  <dt>Application name</dt>
+  <dd>Twitter</dd>
+  <dt>Company Domain</dt>
+  <dd>handson2.realm.io</dd>
+  <dt>Minimum SDK</dt>
+  <dd>15</dd>
+  <dt>Activity type</dt>
+  <dd>Empty Activity</dd>
+</dl>
+
+
+<p><img src="./new_project.png" alt="image" /></p>
+
+<p>プロジェクトを作成したら、左上のProject Viewを<code>Android</code>から<code>Project</code>へ変更します。こうすることで、実際のディレクトリ構成と一致した状態で表示することができます。</p>
+
+<p><img src="./to_Project.png" alt="image" /></p>
+
+<p><img src="./project_view.png" alt="image" /></p>
+
+<p>この状態で、一旦 <code>Tools &gt; Android &gt; Sync Project with Gradle Files</code> を実行し、エラーなくビルドできることを確認します。</p>
+
+<p>また、この段階でアプリが実行できることを確認してください。</p>
+
+<h1>Realmのセットアップ</h1>
+
+<p>Gradleプラグインを適用することで、Realmが使用できるようにします。</p>
+
+<p><code>./build.gradle</code> の <code>buildscript.dependencies</code>の中に<code>classpath 'io.realm:realm-gradle-plugin:0.88.3'</code>を記述します。この記述により、使用するRealmのバージョンが決定されます。追加後は以下のようになります。</p>
+
+<pre><code>// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.0.0'
+        classpath 'io.realm:realm-gradle-plugin:0.88.3'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+</code></pre>
+
+<p>次に、<code>app/build.gradle</code>の2行目に<code>apply plugin: 'realm-android'</code>を記述します。この記述は、<code>apply plugin: 'com.android.application'</code>より後に来るようにしてください。</p>
+
+<pre><code>apply plugin: 'com.android.application'
+apply plugin: 'realm-android'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "24.0.0 rc2"
+
+    defaultConfig {
+        applicationId "io.realm.handson2.twitter"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+}
+</code></pre>
+
+<p>この状態で、一旦 <code>Tools &gt; Android &gt; Sync Project with Gradle Files</code> を実行し、エラーなくビルドできることを確認します。</p>
+
+<p>アプリのとしては変化はありあせんが、これによりRealmを使用する準備が整いました。</p>
+
+<h1>タイムライン表示の作成</h1>
+
+<p>ここからしばらくはTwitterの表示部分の実装を進めていきます。</p>
+
+<p><code>app/main/res/layout/activity_main.xml</code>を開き、もとの記述を削除した後ViewPagerとPagerTitleStripを配置します。</p>
+
+<pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;android.support.v4.view.ViewPager
+    android:id="@+id/pager"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="io.realm.handson2.twitter.MainActivity"&gt;
+
+    &lt;android.support.v4.view.PagerTitleStrip
+        android:id="@+id/pager_title_strip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp"/&gt;
+
+&lt;/android.support.v4.view.ViewPager&gt;
+</code></pre>
+
+<p>つぎに、1ツイート分のレイアウトとして<code>app/main/res/layout/listitem_tweet.xml</code>を作成します。</p>
+
+<pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp"&gt;
+
+    &lt;ImageView
+        android:id="@+id/image"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="#10000000"
+        tools:ignore="ContentDescription"/&gt;
+
+    &lt;TextView
+        android:id="@+id/screen_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@id/image"
+        android:layout_toRightOf="@id/image"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        tools:text="screen name"/&gt;
+
+    &lt;TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/screen_name"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignStart="@id/screen_name"
+        android:layout_below="@id/screen_name"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        tools:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry."/&gt;
+
+&lt;/RelativeLayout&gt;
+</code></pre>
+
+<p><img src="./listitem.png" alt="image" /></p>
+
+<p>レイアウトは　以上で準備完了です。以降でJavaのコードを記述していきます。</p>
+
+<p>ViewPagerの中身となるFragmentとして、<code>app/main/src/java/</code>に<code>io.realm.handson2.twitter.TimelineFragment</code>クラスを以下のように作成します。現状では、</p>
+
+<pre><code>package io.realm.handson2.twitter;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ListFragment;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+
+import java.util.Arrays;
+
+public class TimelineFragment extends ListFragment {
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        final ListAdapter adapter = new ArrayAdapter&lt;String&gt;(getContext(),
+                R.layout.listitem_tweet,
+                R.id.text,
+                Arrays.asList("Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                ));
+
+        setListAdapter(adapter);
+    }
+}
+</code></pre>
+
+<p>最後に<code>MainActvity.java</code>を開き、<code>MainPagerAdapter</code>クラスの追加とし、<code>onCreate()</code>メソッドから呼び出すコードを記述します。</p>
+
+<pre><code>    private static final class MainPagerAdapter extends FragmentStatePagerAdapter {
+
+        public MainPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public int getCount() {
+            return 1;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "タイムライン";
+                default:
+                    throw new RuntimeException("unexpected position: " + position);
+            }
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return new TimelineFragment();
+                default:
+                    throw new RuntimeException("unexpected position: " + position);
+            }
+        }
+    }
+</code></pre>
+
+<p><code>MainActovoty#onCreate()</code>の末尾に以下のコードを追加します。</p>
+
+<pre><code>        final ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        //noinspection ConstantConditions
+        pager.setAdapter(new MainPagerAdapter(getSupportFragmentManager()));
+</code></pre>
+
+<h1>Twitter4Jのセットアップ</h1>
+
+<p>まず、Twitter4jを使えるようにします。</p>
+
+<p><code>app/build.gradle</code>の<code>dependencies</code>に<code>compile 'org.twitter4j:twitter4j-core:4.0.4'</code>を追加します。</p>
+
+<p>追加後は以下のようになります。</p>
+
+<pre><code>apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "24.0.0 rc2"
+
+    defaultConfig {
+        applicationId "io.realm.handson2.twitter"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'org.twitter4j:twitter4j-core:4.0.4'
+}
+</code></pre>
+
+<p><code>Tools &gt; Android &gt; Sync Project with Gradle Files</code> を実行してください。</p>
+
+<p><code>TwitterAuthUtil</code>クラスを以下のように作成します。このクラスは、認証に必要な情報をSharedPreferencesに保存する等のサポートクラスです。</p>
+
+<pre><code>package io.realm.handson2.twitter;
+
+import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import twitter4j.auth.AccessToken;
+import twitter4j.auth.RequestToken;
+
+public final class TwitterAuthUtil {
+    private static Application app;
+
+    private static final String PREF_NAME = "auth";
+    private static final String KEY_REQUEST_TOKEN = "requestToken";
+    private static final String KEY_REQUEST_TOKEN_SECRET = "requestTokenSecret";
+    private static final String KEY_ACCESS_TOKEN = "accessToken";
+    private static final String KEY_ACCESS_TOKEN_SECRET = "accessTokenSecret";
+    private static final String KEY_ACCESS_USER = "accessUser";
+
+    public static void init(Application app) {
+        TwitterAuthUtil.app = app;
+    }
+
+    public static String getCallbackUrlString() {
+        return app.getPackageName() + ".callback://CallBackActivity";
+    }
+
+    public synchronized static void saveRequestToken(RequestToken requestToken) {
+        getPreference().edit()
+                .putString(KEY_REQUEST_TOKEN, requestToken.getToken())
+                .putString(KEY_REQUEST_TOKEN_SECRET, requestToken.getTokenSecret())
+                .apply();
+    }
+
+    public synchronized static RequestToken loadRequestToken() {
+        final SharedPreferences pref = getPreference();
+
+        final String token = pref.getString(KEY_REQUEST_TOKEN, null);
+        final String secret = pref.getString(KEY_REQUEST_TOKEN_SECRET, null);
+        if (token == null || secret == null) {
+            return null;
+        }
+        return new RequestToken(token, secret);
+    }
+
+    public synchronized static void saveAccessToken(AccessToken accessToken) {
+        getPreference().edit()
+                .putString(KEY_ACCESS_TOKEN, accessToken.getToken())
+                .putString(KEY_ACCESS_TOKEN_SECRET, accessToken.getTokenSecret())
+                .putLong(KEY_ACCESS_USER, accessToken.getUserId())
+                .apply();
+    }
+
+    public synchronized static AccessToken loadAccessToken() {
+        final SharedPreferences pref = getPreference();
+
+        final String token = pref.getString(KEY_ACCESS_TOKEN, null);
+        final String secret = pref.getString(KEY_ACCESS_TOKEN_SECRET, null);
+        if (token == null || secret == null) {
+            return null;
+        }
+        return new AccessToken(token, secret, pref.getLong(KEY_ACCESS_USER, -1L));
+    }
+
+    public synchronized static void clearTokens() {
+        getPreference().edit()
+                .clear()
+                .apply();
+    }
+
+    private static SharedPreferences getPreference() {
+        return app.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+    }
+}
+</code></pre>
+
+<p><code>MyApplication</code>クラスを作成し、ユーティリティクラスとTwitter4Jの初期化を行います。<code>&lt;consumerKey&gt;</code>と<code>&lt;consumerSecret&gt;</code>の部分は各自のものに置き換えてください。取得方法はコードの後で説明します。</p>
+
+<pre><code>package io.realm.handson2.twitter;
+
+import android.app.Application;
+
+import twitter4j.TwitterFactory;
+
+public class MyApplication extends Application {
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        TwitterAuthUtil.init(this);
+
+        TwitterFactory.getSingleton().setOAuthConsumer(
+                "&lt;consumerKey&gt;",
+                "&lt;consumerSecret&gt;");
+    }
+}
+</code></pre>
+
+<p>また、このクラスを<code>AndroidManifest.xml</code>に追加してください。</p>
+
+<pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;manifest package="io.realm.handson2.twitter"
+          xmlns:android="http://schemas.android.com/apk/res/android"&gt;
+
+    &lt;application
+        android:name=".MyApplication"
+(省略)
+</code></pre>
+
+<p><code>&lt;consumerKey&gt;</code>と<code>&lt;consumerSecret&gt;</code>を入手するため、<a href="https://apps.twitter.com/">https://apps.twitter.com/</a>にアクセスし、<code>Create New App</code>をします。</p>
+
+<p>以下の設定で作成してください。<code>Callback URL</code>は画面上は必須ではないですが、空にしておくとアプリからの認証が通らなくなるので何らかの有効なURLを入力してください。</p>
+
+<dl>
+  <dt>Name</dt>
+  <dd>RealmHandsOn</dd>
+  <dt>Description</dt>
+  <dd>sample application for realm hands-on</dd>
+  <dt>Website</dt>
+  <dd>http://www.realm.io/</dd>
+  <dt>Callback URL</dt>
+  <dd>http://www.realm.io/</dd>
+  <dt>Enable Callback Locking</dt>
+  <dd>チェックなし</dd>  
+  <dt>Allow this application to be used to Sign in with Twitter</dt>
+  <dd>チェックあり(なしでもOK)  </dd>  
+</dl>
+
+
+<p>作成完了後、<code>manage keys and access tokens</code>のリンクをクリックして表示された画面から<code>&lt;consumerKey&gt;</code>と<code>&lt;consumerSecret&gt;</code>を入手し先ほどの<code>MyApplication</code>クラスで渡してください。</p>
+
+<h1>ログイン画面の作成</h1>
+
+<p>次にログイン画面を作成します。</p>
+
+<p>認証されていない状態でアプリが起動されるとログインボタンのみの画面を表示し、ボタンが押されたらブラウザを起動して認証を行い、その結果を受け取ることでログインを完了させます。</p>
+
+<p><img src="./login.png" alt="image" /></p>
+
+<p>Twitterのログインはブラウザを使用するので、画面はとてもシンプルです。中央にLOGINと書かれたボタンが一つおかれた画面を<code>app/main/res/layout/activity_login.xml</code>として作成してください。</p>
+
+<pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="io.realm.handson2.twitter.LoginActivity"&gt;
+
+    &lt;Button
+        android:id="@+id/login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Login"
+        tools:ignore="HardcodedText"/&gt;
+
+&lt;/FrameLayout&gt;
+</code></pre>
+
+<p>これを使用するクラスとして、<code>LoginActivity</code>クラスを作成してください。</p>
+
+<pre><code>package io.realm.handson2.twitter;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
+import twitter4j.auth.RequestToken;
+
+public class LoginActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        final AccessToken accessToken = TwitterAuthUtil.loadAccessToken();
+        if (accessToken != null) {
+            /*
+              もとからアクセストークンが保存されていた場合や、
+              認証成功した場合にここを通る。
+             */
+            TwitterFactory.getSingleton().setOAuthAccessToken(accessToken);
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+            return;
+        }
+
+        setContentView(R.layout.activity_login);
+
+        final View button = findViewById(R.id.login);
+        //noinspection ConstantConditions
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                executeLogin();
+            }
+        });
+    }
+
+    private void executeLogin() {
+        new AsyncTask&lt;Void, Void, Void&gt;() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                TwitterAuthUtil.clearTokens();
+                final Twitter twitter = TwitterFactory.getSingleton();
+                try {
+                    final RequestToken requestToken = twitter.getOAuthRequestToken(
+                            TwitterAuthUtil.getCallbackUrlString());
+                    final String authUrl = requestToken.getAuthorizationURL();
+                    TwitterAuthUtil.saveRequestToken(requestToken);
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(authUrl)));
+                } catch (TwitterException e) {
+                    throw new RuntimeException(e);
+                }
+                return null;
+            }
+        }.execute();
+    }
+}
+</code></pre>
+
+<p>また、<code>AndroidManifest.xml</code>へ登録を行います。いままではlaunch activityは<code>MainActivity</code>でしたが、いま作成した<code>Login Activity</code>が起動されるように<code>MAIN</code>のインテントフィルタを移動します。</p>
+
+<p>同時に、<code>INTERNET</code>パーミッションの追加も行います。</p>
+
+<pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;manifest package="io.realm.handson2.twitter"
+          xmlns:android="http://schemas.android.com/apk/res/android"&gt;
+
+    &lt;uses-permission android:name="android.permission.INTERNET"/&gt;
+
+    &lt;application
+        android:name=".MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"&gt;
+
+        &lt;activity android:name=".LoginActivity"&gt;
+            &lt;intent-filter&gt;
+                &lt;action android:name="android.intent.action.MAIN"/&gt;
+
+                &lt;category android:name="android.intent.category.LAUNCHER"/&gt;
+            &lt;/intent-filter&gt;
+        &lt;/activity&gt;
+
+        &lt;activity android:name=".MainActivity"/&gt;
+    &lt;/application&gt;
+
+&lt;/manifest&gt;
+</code></pre>
+
+<p>ブラウザから結果を受け取り画面を作成します。中央にプログレス、その下にメッセージがあるだけの画面です。</p>
+
+<p><img src="./callback.png" alt="image" /></p>
+
+<pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="io.realm.handson2.twitter.LoginActivity"&gt;
+
+    &lt;ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"/&gt;
+
+    &lt;TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/progress"
+        android:layout_centerHorizontal="true"
+        android:text="ログイン処理中..."
+        tools:ignore="HardcodedText"/&gt;
+
+&lt;/RelativeLayout&gt;
+</code></pre>
+
+<p><code>CallbackActivity</code>クラスを作成します。</p>
+
+<pre><code>package io.realm.handson2.twitter;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
+
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
+import twitter4j.auth.RequestToken;
+
+public class CallbackActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_callback);
+
+        final Uri uri = getIntent().getData();
+        if (uri == null || !uri.toString().startsWith(TwitterAuthUtil.getCallbackUrlString())) {
+            Toast.makeText(this, "unexpected Uri in Intent: " + uri, Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        final String verifier = uri.getQueryParameter("oauth_verifier");
+
+        final RequestToken requestToken = TwitterAuthUtil.loadRequestToken();
+        TwitterAuthUtil.clearTokens();
+        if (requestToken == null) {
+            Toast.makeText(this, "RequestTokenのロードに失敗しました。", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        new AsyncTask&lt;Void, Void, Void&gt;() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    final Twitter twitter = TwitterFactory.getSingleton();
+
+                    final AccessToken accessToken = twitter.getOAuthAccessToken(requestToken, verifier);
+                    TwitterAuthUtil.saveAccessToken(accessToken);
+                    startMainActivity();
+                } catch (TwitterException e) {
+                    throw new RuntimeException(e);
+                }
+                return null;
+            }
+        }.execute();
+    }
+
+    private void startMainActivity() {
+        final Intent intent = new Intent(CallbackActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+}
+</code></pre>
+
+<p>同様に<code>AndroidManifest.xml</code>に登録します。その際、ブラウザから結果を受け取るためのインテントフィルタの追加を忘れずに行ってください。</p>
+
+<pre><code>        &lt;activity
+            android:name=".CallbackActivity"
+            android:noHistory="true"&gt;
+            &lt;intent-filter&gt;
+                &lt;action android:name="android.intent.action.VIEW"/&gt;
+
+                &lt;category android:name="android.intent.category.DEFAULT"/&gt;
+                &lt;category android:name="android.intent.category.BROWSABLE"/&gt;
+
+                &lt;data android:scheme="${applicationId}.callback"/&gt;
+            &lt;/intent-filter&gt;
+        &lt;/activity&gt;
+</code></pre>
+
+<p>ここまで正常に完了すると、初回起動時はログイン画面が表示され、ログインに成功するとタイムライン画面に遷移します。一度認証が成功すると、以降の起動ははじめからタイムライン画面が表示されます。</p>
+
+<h1>Realmの初期化とモデル定義</h1>
+
+<p><code>MyApplication#onCreate()</code>で、<code>RealmConfiguration</code>を作成しデフォルトの設定としてセットします。</p>
+
+<pre><code>        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(this).build());
+</code></pre>
+
+<p>Realmファイルを１つしか使用しない場合は、このようにデフォルト設定としてセットしておくことで利用時に簡単に<code>Realm</code>インスタンスを取得できるようになります。</p>
+
+<p>次に、Realmにデータを格納する際のデータ構造を定義するクラスを作成します。Realmではこのようなクラスをモデルクラスと呼んでいます。</p>
+
+<p><code>io.realm.handson2.twitter.entity</code>パッケージを作成し、その中に以下のような<code>Tweet</code>クラスを作成してください。</p>
+
+<pre><code>package io.realm.handson2.twitter.entity;
+
+import io.realm.RealmObject;
+import twitter4j.Status;
+
+public class Tweet extends RealmObject {
+    private String screenName;
+    private String text;
+    private String iconUrl;
+
+    public Tweet() {
+    }
+
+    public Tweet(Status status) {
+        setScreenName(status.getUser().getScreenName());
+        setText(status.getText());
+        setIconUrl(status.getUser().getProfileImageURLHttps());
+    }
+
+    public String getScreenName() {
+        return screenName;
+    }
+
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
+}
+</code></pre>
+
+<p>モデルクラスは必ず<code>RealmObject</code>クラスを継承し、引き数なしの<code>public</code>なコンストラクタを持っている必要があります。このクラスに定義されたフィールドの名前がデータベースにも反映されます。最新のRealmでは、getter/setter等の名前は自由に決めて構いません。フィールドを<code>public</code>にして直接外から読み書きする　のも問題ありません。</p>
+
+<p>フィールドに使用できる型には制限があります。詳細は<a href="https://realm.io/jp/docs/java/latest/#section-6">対応しているデータ型</a>を参照してください。</p>
+
+<h1>タイムラインの読み込みとRealmへの格納</h1>
+
+<p>今回のアプリでは、ツイッターから取得したデータは一旦すべてRealmに格納し、表示はRealmから取り出すようにします。</p>
+
+<p>まずはツイッターのタイムラインデータをサーバーから取得し、Realmに格納する部分を実装します。</p>
+
+<p><code>UpdateService</code>クラスを以下のように実装します。</p>
+
+<p>Realmでのデータベースの読み書きは<code>io.realm.Realm</code>インスタンスが起点となります。</p>
+
+<p>書き込みのみを行うクラスの場合、必要なときに<code>Realm.getDefaultInstance()</code>でインスタンスを取得し書き込みが完了したら<code>close()</code>するのがおすすめです。</p>
+
+<p>また、データの登録、更新、削除はトランザクションの中で実行する必要があるので注意してください。</p>
+
+<pre><code>package io.realm.handson2.twitter;
+
+import android.app.IntentService;
+import android.content.Intent;
+import android.util.Log;
+import android.widget.Toast;
+
+import io.realm.Realm;
+import io.realm.handson2.twitter.entity.Tweet;
+import twitter4j.ResponseList;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+
+public class UpdateService extends IntentService {
+    public UpdateService() {
+        super("UpdateService");
+    }
+
+    @Override
+    protected void onHandleIntent(Intent intent) {
+        loadTimeline();
+    }
+
+    private void loadTimeline() {
+        final Twitter twitter = TwitterFactory.getSingleton();
+
+        final ResponseList&lt;Status&gt; homeTimeline;
+        try {
+            homeTimeline = twitter.getHomeTimeline();
+        } catch (TwitterException e) {
+            Toast.makeText(this, "通信でエラーが発生しました: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.e("RealmTwitter", "通信でエラーが発生しました。", e);
+            return;
+        }
+
+        final Realm realm = Realm.getDefaultInstance();
+        try {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    for (Status status : homeTimeline) {
+                        final Tweet tweet = new Tweet(status);
+                        realm.copyToRealm(tweet);
+                    }
+                }
+            });
+        } finally {
+            realm.close();
+        }
+    }
+}
+</code></pre>
+
+<p>忘れずに<code>AndroidManifest.xml</code>への登録も行ってください。</p>
+
+<pre><code>(省略)
+        &lt;activity android:name=".MainActivity"/&gt;
+
+        &lt;service
+            android:name=".UpdateService"
+            android:exported="false"&gt;
+        &lt;/service&gt;
+    &lt;/application&gt;
+(省略)
+</code></pre>
+
+<p>このサービスを、<code>MainActivity#onStart()</code>から起動します。以下のコードを追加してください。</p>
+
+<pre><code>    @Override
+    protected void onStart() {
+        super.onStart();
+
+        startService(new Intent(this, UpdateService.class));
+    }
+</code></pre>
+
+<h1>Realmからの読み込み</h1>
+
+<p><code>TimelineFragment</code>の実装を修正して実際にデータベースからの読み込みを行います。</p>
+
+<p>Realmでは遅延ロードを行う都合上、モデルクラスのインスタンスを使用する間はRealmをクローズしてはいけないという制約があります。そのため、ActivityやFragmentでは、ライフサイクルメソッドに関連付けてRealmインスタンスを管理することが推奨されます。</p>
+
+<p>まずはフィールドにRealmインスタンスを保持するため、クラスの先頭に<code>private Realm realm;</code>を追加します。</p>
+
+<p>インスタンスの取得と開放は、Activityであれば<code>onCreate()/onDestroy()</code>を使用することが多いです。Fragmentの場合、使い方によっては<code>onDestry()</code>が呼ばれないことがあるため(具体的にはretain instance をしていてかつバックスタックに入っている場合)、<code>onCreateView()</code>や<code>onViewCreated()</code>でインスタンスを取得し、<code>onDestroyView()</code>で開放することをおすすめします。または、<code>onStart()/onStop()</code>の利用も推奨しています。</p>
+
+<p><code>TimelineFragment#onViewCreated()</code>を以下のようにオーバーライドしてください。Realmインスタンスの取得と、そこから<code>Tweet</code>を読みだし<code>RealmBaseAdapter</code>を用いて<code>ListView</code>に表示しています。<code>RealmBaseAdapter</code>はRealmのデータを簡単に<code>ListView</code>に表示でいるようにするためにRealmが提供しているクラスです。</p>
+
+<p>今回はすべてのデータを取り出すので、<code>realm.allObjects(Tweet.class);</code>で読みだしています。繰り返しになりますが、ここで取得したデータにアクセスする可能性があるあいだはRealmインスタンスを<code>close()</code>しないようにしてください。</p>
+
+<pre><code>    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        realm = Realm.getDefaultInstance();
+
+        final RealmResults&lt;Tweet&gt; tweets = realm.allObjects(Tweet.class);
+        final RealmBaseAdapter&lt;Tweet&gt; adapter = new RealmBaseAdapter&lt;Tweet&gt;(getContext(), tweets, true) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                final Tweet tweet = getItem(position);
+
+                if (convertView == null) {
+                    convertView = inflater.inflate(R.layout.listitem_tweet, parent, false);
+                }
+
+                // TODO 余裕があればViewHolderパターンを適用してください
+                ((TextView) convertView.findViewById(R.id.screen_name)).setText(tweet.getScreenName());
+                ((TextView) convertView.findViewById(R.id.text)).setText(tweet.getText());
+
+                return convertView;
+            }
+        };
+
+        setListAdapter(adapter);
+    }
+</code></pre>
+
+<p>また、<code>onDestroyView()</code>をオーバーライドしてRealmインスタンスをクローズします。<code>((RealmBaseAdapter&lt;?&gt;) getListAdapter()).updateRealmResults(null);</code>の部分は画面回転時にクラッシュするのを防ぐために入れています。</p>
+
+<pre><code>    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ((RealmBaseAdapter&lt;?&gt;) getListAdapter()).updateRealmResults(null);
+        realm.close();
+        realm = null;
+    }
+</code></pre>
+
+<h1>重複排除と時間順での並べ替え</h1>
+
+<p>今のままでは、起動するたびにタイムラインからデータベースに直近の20件が書き込まれていきますが、重複したものもそのまま追加されてしまいます。また、発言の表示順も保証されない状態です。この点を修正していきます。</p>
+
+<p>重複の排除は、各データに一意なフィールドを持たせることで実現します。この一意の情報をプライマリーキーと呼びます。また、発言の順序を保証するために発言日時を保持するフィールドも追加する必要がります。</p>
+
+<p>このように、後からモデル定義が変わる場合は既存のデータとの整合性を取るため、データ移行(マイグレーション)が必要になります。</p>
+
+<p>ただし、ここではマイグレーションは行わず、一旦データをクリアする方法を取ります。マイグレーションに関しては後ほど取り上げます。</p>
+
+<p>まず、<code>MyApplication#onCreate()</code>で行っているRealmの設定を変更して、マイグレーションが必要ということが検出された際にはデータベースを削除して作りなおすようにします。</p>
+
+<p><code>Realm.setDefaultConfiguration(new RealmConfiguration.Builder(this).build());</code>の部分を<code>Realm.setDefaultConfiguration(new RealmConfiguration.Builder(this).deleteRealmIfMigrationNeeded().build());</code>に書き換えてください(途中に<code>.deleteRealmIfMigrationNeeded()</code>を追加します)。</p>
+
+<p>これにより、マイグレーションが必要な場合にはデータベースが削除されるようになります。マスターデータがサーバーにあっていつでも取り出せるような場合は、このように一旦データを捨ててしまうことも有力な選択肢になります。</p>
+
+<p>では、モデル定義を修正していきましょう。<code>Tweet</code>クラスに以下のフィールドを追加してください。<code>id</code>フィールドには<code>@PrimaryKey</code>アノテーションが付与されていることに注意してください。このアノテーションを付与することで、Realmはこのフィールドに対して一意性を保証するよう追加のチョックを行うとともに、検索を高速化するためのインデックス作成を行います。getter/setterも定義してください。</p>
+
+<pre><code>    @PrimaryKey
+    private long id;
+    private Date createdAt;
+
+        public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+</code></pre>
+
+<p>次にツイートからidや日時を読みだす処理を追加します。<code>Status</code>を受け取るコンストラクタに以下の処理を追加してください。</p>
+
+<pre><code>        setId(status.getId());
+        setCreatedAt(status.getCreatedAt());
+</code></pre>
+
+<p>すべての修正を行うと、<code>Tweet</code>クラスは以下のようになります。</p>
+
+<pre><code>package io.realm.handson2.twitter.entity;
+
+import java.util.Date;
+
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+import twitter4j.Status;
+
+public class Tweet extends RealmObject {
+    @PrimaryKey
+    private long id;
+    private Date createdAt;
+    private String screenName;
+    private String text;
+    private String iconUrl;
+    private boolean favorited;
+
+    public Tweet() {
+    }
+
+    public Tweet(Status status) {
+        setId(status.getId());
+        setCreatedAt(status.getCreatedAt());
+        setScreenName(status.getUser().getScreenName());
+        setText(status.getText());
+        setIconUrl(status.getUser().getProfileImageURLHttps());
+        setFavorited(status.isFavorited());
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getScreenName() {
+        return screenName;
+    }
+
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
+
+    public boolean isFavorited() {
+        return favorited;
+    }
+
+    public void setFavorited(boolean favorited) {
+        this.favorited = favorited;
+    }
+}
+</code></pre>
+
+<p>プライマリーキーを追加したので、プライマリーキーが同じデータが既に存在する場合には追加ではなく更新を行うように修正します。</p>
+
+<p><code>UpdateService</code>を開き、データを保存する部分の<code>realm.copyToRealm(tweet);</code>を<code>realm.copyToRealmOrUpdate(tweet);</code>に変更します。前者は重複があるとエラーになりますが、後者は新しいデータで上書きします。</p>
+
+<p>これで発言の重複は発生しなくなりました。次に表示順序を修正します。</p>
+
+<p><code>TimelineFragment</code>を開き、データを取得すr部分コードを修正します。今回単に順序を正しくするだけではなく、今後に備えてデータの取得部分をメソッドとして抽出しておきます。</p>
+
+<p>まず<code>realm.allObjects(Tweet.class);</code>の部分を<code>realm.allObjectsSorted(Tweet.class, "createdAt", Sort.DESCENDING);</code>に書き換えます。俺により、<code>createdAt</code>フィールドの値の降順で表示されるようになります。さらにこの部分を以下の様なメソッドとして抽出します。可視性が<code>protected</code>であることと、引き数に<code>Realm</code>を渡していることに注意してください。
+<code>
+    @NonNull
+    protected RealmResults&lt;Tweet&gt; buildTweetList(Realm realm) {
+        return realm.allObjectsSorted(Tweet.class, "createdAt", Sort.DESCENDING);
+    }
+</code></p>
+
+<h1>ふぁぼリストの追加</h1>
+
+<p>これまで画面にはタイムラインのみを表示していましたが、favoritedな発言を集めたリストを追加します。</p>
+
+<p>まず、favoritedかどうかを保持するフィールドが必要になるので、<code>Tweet</code>クラスを修正しますが、今回は既存のデータを残すようマイグレーションも記述します。そのための準備として、先ほど追加した<code>.deleteRealmIfMigrationNeeded()</code>を取り除き<code>Realm.setDefaultConfiguration(new RealmConfiguration.Builder(this).build());</code>に戻します(<code>MyApplication</code>クラス)。</p>
+
+<p><code>id</code>を追加したときと同様に、<code>Tweet</code>クラスに<code>boolean</code>型のフィールド<code>favorited</code>とそのgetter/setter、コンストラクタでの読み出しコードを追加してください。読み出しは以下のとおりです。</p>
+
+<pre><code>        setFavorited(status.isFavorited());
+</code></pre>
+
+<p>修正後の<code>Tweet</code>クラスを掲載します。</p>
+
+<pre><code>package io.realm.handson2.twitter.entity;
+
+import java.util.Date;
+
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+import twitter4j.Status;
+
+public class Tweet extends RealmObject {
+    @PrimaryKey
+    private long id;
+    private Date createdAt;
+    private String screenName;
+    private String text;
+    private String iconUrl;
+    private boolean favorited;
+
+    public Tweet() {
+    }
+
+    public Tweet(Status status) {
+        //https://dev.twitter.com/overview/api/twitter-ids-json-and-snowflake
+        setId(status.getId());
+        setCreatedAt(status.getCreatedAt());
+        setScreenName(status.getUser().getScreenName());
+        setText(status.getText());
+        setIconUrl(status.getUser().getProfileImageURLHttps());
+        setFavorited(status.isFavorited());
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getScreenName() {
+        return screenName;
+    }
+
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
+
+    public boolean isFavorited() {
+        return favorited;
+    }
+
+    public void setFavorited(boolean favorited) {
+        this.favorited = favorited;
+    }
+}
+</code></pre>
+
+<p>次にマイグレーションを実装します。</p>
+
+<p>マイグレーションは<code>RealmConfiguration</code>を作成するのビルダーに、一緒に指定します。</p>
+
+<p><code>MyApplication</code>クラスを開いてください。コンフィギュレーションを作成するコードが長くなるので、まずはその部分をメソッドとして抽出します。</p>
+
+<pre><code>    @Override
+    public void onCreate() {
+        super.onCreate();
+(省略)
+        Realm.setDefaultConfiguration(buildRealmConfiguration());
+    }
+
+    private RealmConfiguration buildRealmConfiguration() {
+        return new RealmConfiguration.Builder(this).build();
+    }
+</code></pre>
+
+<p>ここで抽出した<code>buildRealmConfiguration()</code>メソッドを修正していきます。</p>
+
+<p>まず、変更後の最新のスキーマのバージョン番号を指定します。今まで省略していたので、バージョンは<code>0</code>です。スキーマを変更する場合は今までよりも大きな値を指定する必要があるので、ここでは<code>1</code>を指定します。</p>
+
+<pre><code>    private RealmConfiguration buildRealmConfiguration() {
+        return new RealmConfiguration.Builder(this)
+                .schemaVersion(1L)
+                .build();
+    }
+</code></pre>
+
+<p>次に、スキーマバージョン0からスキーマバージョン1への変更の内容を記述します。今回の例では、<code>Tweet</code>クラスに対応する<code>RealmObjectSchema</code>インスタンスを取得し、<code>favorited</code>フィールドを追加しています。</p>
+
+<pre><code>    private RealmConfiguration buildRealmConfiguration() {
+        return new RealmConfiguration.Builder(this)
+                .schemaVersion(1L)
+                .migration(new RealmMigration() {
+                    @Override
+                    public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
+                        if (oldVersion == 0L) {
+                            final RealmObjectSchema tweetSchema = realm.getSchema().get("Tweet");
+                            tweetSchema.addField("favorited", boolean.class);
+
+                            //noinspection UnusedAssignment
+                            oldVersion++;
+                        }
+                    }
+                })
+                .build();
+    }
+</code></pre>
+
+<p>favoritedなリストのためのフラグメント<code>FavoritedFragment</code>を以下のように作成します。<code>TimelineFragment</code>を継承して簡単に実装できました。</p>
+
+<p>ここでは発言を全て取得するのではなく、<code>favorited</code>が<code>true</code>であるものだけを取得するよう条件を追加しています。</p>
+
+<p>どのような条件を指定することができるかについては<a href="https://realm.io/jp/docs/java/latest/#section-15">クエリ</a>を参照してください。</p>
+
+<pre><code>package io.realm.handson2.twitter;
+
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ListFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import io.realm.Realm;
+import io.realm.RealmBaseAdapter;
+import io.realm.RealmResults;
+import io.realm.Sort;
+import io.realm.handson2.twitter.entity.Tweet;
+
+public class FavoritedFragment extends TimelineFragment {
+    @NonNull
+    @Override
+    protected RealmResults&lt;Tweet&gt; buildTweetList(Realm realm) {
+        return realm.where(Tweet.class)
+                .equalTo("favorited", true)
+                .findAllSorted("createdAt", Sort.DESCENDING);
+    }
+}
+</code></pre>
+
+<p>このフラグメントを表示するよう<code>MainActivity</code>の中の<code>MainPagerAdapter</code>を修正します。以下のように、カウントを2にし、ページタイトルとitemを適切に返すように修正してください。</p>
+
+<pre><code>    private static final class MainPagerAdapter extends FragmentStatePagerAdapter {
+
+        public MainPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "タイムライン";
+                case 1:
+                    return "ふぁぼ";
+                default:
+                    throw new RuntimeException("unexpected position: " + position);
+            }
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return new TimelineFragment();
+                case 1:
+                    return new FavoritedFragment();
+                default:
+                    throw new RuntimeException("unexpected position: " + position);
+            }
+        }
+    }
+</code></pre>
+
+<h1>ふぁぼの背景色変更</h1>
+
+<p>この部分はRealmとは直接は関係のない作業です。</p>
+
+<p>まず、Listアイテムの<code>checked</code>状態に応じて背景色を変えてくれる機能を持った<code>RelativeLayout</code>クラスである<code>CheckableRelativeLayout</code>クラスを以下のように作成します。</p>
+
+<pre><code>package io.realm.handson2.twitter;
+
+import android.content.Context;
+import android.util.AttributeSet;
+import android.widget.Checkable;
+import android.widget.RelativeLayout;
+
+public class CheckableRelativeLayout extends RelativeLayout implements Checkable {
+    private boolean mChecked;
+    private static final int[] CHECKED_STATE_SET = {
+            android.R.attr.state_checked
+    };
+
+    public CheckableRelativeLayout(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    @Override
+    protected int[] onCreateDrawableState(int extraSpace) {
+        final int[] drawableState = super.onCreateDrawableState(extraSpace + 1);
+        if (isChecked()) {
+            mergeDrawableStates(drawableState, CHECKED_STATE_SET);
+        }
+        return drawableState;
+    }
+
+    @Override
+    public void toggle() {
+        setChecked(!mChecked);
+    }
+
+    @Override
+    public boolean isChecked() {
+        return mChecked;
+    }
+
+    @Override
+    public void setChecked(boolean checked) {
+        if (mChecked != checked) {
+            mChecked = checked;
+            refreshDrawableState();
+        }
+    }
+}
+</code></pre>
+
+<p>次に、<code>checked</code>状態に応じて色が変わる<code>drawable</code>を定義します。</p>
+
+<p><code>app/src/main/res/drawable/tweet_background.xml</code>を以下のように作成してください。</p>
+
+<pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;selector xmlns:android="http://schemas.android.com/apk/res/android"&gt;
+    &lt;item android:state_checked="true"&gt;
+        &lt;color android:color="#30a4c639"/&gt;
+    &lt;/item&gt;
+&lt;/selector&gt;
+</code></pre>
+
+<p><code>app/src/main/res/layout/listitem_tweet.xml</code>を開き、作成した<code>CheckableRelativeLayout</code>と<code>tweet_background</code>を使用するように書き換えます。書き換えるのは、一番外側の<code>RelativeLayout</code>を<code>io.realm.handson2.twitter.CheckableRelativeLayout</code>にする部分と、そのエレメントに<code>android:background="@drawable/tweet_background"</code>を追加部分の2箇所です。</p>
+
+<pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;io.realm.handson2.twitter.CheckableRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/tweet_background"
+    android:orientation="vertical"
+    android:padding="8dp"&gt;
+
+    &lt;ImageView
+        android:id="@+id/image"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="#10000000"
+        tools:ignore="ContentDescription"/&gt;
+
+    &lt;TextView
+        android:id="@+id/screen_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@id/image"
+        android:layout_toRightOf="@id/image"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        tools:text="screen name"/&gt;
+
+    &lt;TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/screen_name"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignStart="@id/screen_name"
+        android:layout_below="@id/screen_name"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        tools:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry."/&gt;
+
+&lt;/io.realm.handson2.twitter.CheckableRelativeLayout&gt;
+</code></pre>
+
+<p>最後に、<code>TimelineFragment</code>でfavoritedなものを<code>checked</code>状態にする修正を行います。<code>FavoritedFragment</code>は<code>TimelineFragment</code>を継承しているので、<code>TimelineFragment</code>を修正すれば両方に反映されます。</p>
+
+<p><code>TimelineFragment#onVireCreated()</code>に以下のコードを追加し、<code>ListView</code>を複数選択モードにします。</p>
+
+<pre><code>        //noinspection ConstantConditions
+        final ListView listView = getListView();
+        listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+</code></pre>
+
+<p>また、同じ部分で定義している<code>RealmBaseAdapter#getView()</code>の<code>return</code>の直前に、各ツイートのfavorited状態を反映左折コードを追加します。</p>
+
+<pre><code>listView.setItemChecked(position, tweet.isFavorited());
+</code></pre>
+
+<p>修正後の<code>TimelineFragment#onVireCreated()</code>は以下のようになります。</p>
+
+<pre><code>    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        //noinspection ConstantConditions
+        final ListView listView = getListView();
+        listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+
+        realm = Realm.getDefaultInstance();
+
+        final RealmResults&lt;Tweet&gt; tweets = buildTweetList(realm);
+        final RealmBaseAdapter&lt;Tweet&gt; adapter = new RealmBaseAdapter&lt;Tweet&gt;(getContext(), tweets, true) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                final Tweet tweet = getItem(position);
+
+                if (convertView == null) {
+                    convertView = inflater.inflate(R.layout.listitem_tweet, parent, false);
+                }
+
+                // TODO 余裕があればViewHolderパターンを適用してください
+                ((TextView) convertView.findViewById(R.id.screen_name)).setText(tweet.getScreenName());
+                ((TextView) convertView.findViewById(R.id.text)).setText(tweet.getText());
+
+                listView.setItemChecked(position, tweet.isFavorited());
+                return convertView;
+            }
+        };
+
+        setListAdapter(adapter);
+    }
+</code></pre>
+
+<h1>ふぁぼ状態変更</h1>
+
+<p>リストをタップしてfavoritedの状態を変更できるようにします。リストは2つありますが、どちらをタップしても双方に反映されます。</p>
+
+<p><code>TimelineFragmen</code>を開き、<code>onViewCreated()</code>の中で<code>ListView</code>のchoice modeを変更ている部分の後ろに以下のコードを追加します。</p>
+
+<pre><code>        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView&lt;?&gt; parent, View view, int position, long id) {
+                final Tweet tweet = (Tweet) listView.getItemAtPosition(position);
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        tweet.setFavorited(!tweet.isFavorited());
+                    }
+                });
+            }
+        });
+</code></pre>
+
+<h1>アイコン読み込み</h1>
+
+<p>Picassoを使ってアイコンを読み込みます。</p>
+
+<p><code>app/build.gradle</code>の<code>dependences</code>に<code>compile 'com.squareup.picasso:picasso:2.5.2'</code>を追加し、<code>Tools &gt; Android &gt; Sync Project with Gradle Files</code>を実行します。</p>
+
+<p>その後、<code>TimelineFragment</code>の<code>RealmBaseAdapter#getView()</code>の中に以下のコードを追加します。</p>
+
+<pre><code>                Picasso.with(context)
+                        .load(tweet.getIconUrl())
+                        .into((ImageView) convertView.findViewById(R.id.image));
+</code></pre>
+
+<p>修正後の<code>TimelineFragment#onVireCreated()</code>は以下のようになります。</p>
+
+<pre><code>    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        //noinspection ConstantConditions
+        final ListView listView = getListView();
+        listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView&lt;?&gt; parent, View view, int position, long id) {
+                final Tweet tweet = (Tweet) listView.getItemAtPosition(position);
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        tweet.setFavorited(!tweet.isFavorited());
+                    }
+                });
+            }
+        });
+
+        realm = Realm.getDefaultInstance();
+
+        final RealmResults&lt;Tweet&gt; tweets = buildTweetList(realm);
+        final RealmBaseAdapter&lt;Tweet&gt; adapter = new RealmBaseAdapter&lt;Tweet&gt;(getContext(), tweets, true) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                final Tweet tweet = getItem(position);
+
+                if (convertView == null) {
+                    convertView = inflater.inflate(R.layout.listitem_tweet, parent, false);
+                }
+
+                // TODO 余裕があればViewHolderパターンを適用してください
+                ((TextView) convertView.findViewById(R.id.screen_name)).setText(tweet.getScreenName());
+                ((TextView) convertView.findViewById(R.id.text)).setText(tweet.getText());
+
+                Picasso.with(context)
+                        .load(tweet.getIconUrl())
+                        .into((ImageView) convertView.findViewById(R.id.image));
+
+                listView.setItemChecked(position, tweet.isFavorited());
+                return convertView;
+            }
+        };
+
+        setListAdapter(adapter);
+    }
+</code></pre>
+
+<h1>更新ボタン追加</h1>
+
+<p>このままではツイートが更新できないので、更新ボタンを追加します(実際には画面回転すれば更新できますが...)。</p>
+
+<p>まず、<code>app/src/main/res/menu/activity_main.xml</code>を以下のとおり作成します。</p>
+
+<pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"&gt;
+    &lt;item
+        android:id="@+id/refresh"
+        android:title="更新"
+        app:showAsAction="always"
+        tools:ignore="HardcodedText"/&gt;
+
+&lt;/menu&gt;
+</code></pre>
+
+<p>これを<code>MainActivity</code>から使います。<code>MainActivity</code>に以下のコードを追加してください。</p>
+
+<pre><code>    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.refresh:
+                startService(new Intent(this, UpdateService.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+</code></pre>
+
+<p>以上です！</p>
+</body>
+</html>
