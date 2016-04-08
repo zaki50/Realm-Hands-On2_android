@@ -1,8 +1,8 @@
 package io.realm.handson2.twitter;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ListFragment;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 import io.realm.Realm;
 import io.realm.RealmBaseAdapter;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import io.realm.handson2.twitter.entity.Tweet;
 
 public class TimelineFragment extends ListFragment {
@@ -21,7 +22,7 @@ public class TimelineFragment extends ListFragment {
 
         realm = Realm.getDefaultInstance();
 
-        final RealmResults<Tweet> tweets = realm.allObjects(Tweet.class);
+        final RealmResults<Tweet> tweets = buildTweetList(realm);
         final RealmBaseAdapter<Tweet> adapter = new RealmBaseAdapter<Tweet>(getContext(), tweets, true) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -40,6 +41,11 @@ public class TimelineFragment extends ListFragment {
         };
 
         setListAdapter(adapter);
+    }
+
+    @NonNull
+    protected RealmResults<Tweet> buildTweetList(Realm realm) {
+        return realm.allObjectsSorted(Tweet.class, "createdAt", Sort.DESCENDING);
     }
 
     @Override

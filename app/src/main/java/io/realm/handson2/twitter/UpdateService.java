@@ -42,7 +42,7 @@ public class UpdateService extends IntentService {
                 public void execute(Realm realm) {
                     for (Status status : homeTimeline) {
                         final Tweet tweet = new Tweet(status);
-                        realm.copyToRealm(tweet);
+                        realm.copyToRealmOrUpdate(tweet);
                     }
                 }
             });
