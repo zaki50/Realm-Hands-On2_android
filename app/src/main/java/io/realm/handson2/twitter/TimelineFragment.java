@@ -6,6 +6,7 @@ import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,6 +26,19 @@ public class TimelineFragment extends ListFragment {
         //noinspection ConstantConditions
         final ListView listView = getListView();
         listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final Tweet tweet = (Tweet) listView.getItemAtPosition(position);
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        tweet.setFavorited(!tweet.isFavorited());
+                    }
+                });
+            }
+        });
 
         realm = Realm.getDefaultInstance();
 
