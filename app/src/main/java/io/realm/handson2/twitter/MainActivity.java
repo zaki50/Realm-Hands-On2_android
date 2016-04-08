@@ -1,5 +1,6 @@
 package io.realm.handson2.twitter;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -17,6 +18,13 @@ public class MainActivity extends AppCompatActivity {
         final ViewPager pager = (ViewPager) findViewById(R.id.pager);
         //noinspection ConstantConditions
         pager.setAdapter(new MainPagerAdapter(getSupportFragmentManager()));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        startService(new Intent(this, UpdateService.class));
     }
 
     private static final class MainPagerAdapter extends FragmentStatePagerAdapter {
