@@ -7,8 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import io.realm.Realm;
 import io.realm.RealmBaseAdapter;
@@ -55,6 +58,10 @@ public class TimelineFragment extends ListFragment {
                 // TODO 余裕があればViewHolderパターンを適用してください
                 ((TextView) convertView.findViewById(R.id.screen_name)).setText(tweet.getScreenName());
                 ((TextView) convertView.findViewById(R.id.text)).setText(tweet.getText());
+
+                Picasso.with(context)
+                        .load(tweet.getIconUrl())
+                        .into((ImageView) convertView.findViewById(R.id.image));
 
                 listView.setItemChecked(position, tweet.isFavorited());
                 return convertView;
