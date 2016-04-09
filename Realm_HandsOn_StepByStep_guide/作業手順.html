@@ -152,13 +152,13 @@ sup {
 	}
 }
 </style>
-<title>プロジェクトの作成</title>
+<title>1.プロジェクトの作成</title>
 
 </head>
 <body>
 <p><a href="https://github.com/zaki50/Realm-Hands-On2_android">https://github.com/zaki50/Realm-Hands-On2_android</a> からコードがダウンロードできます。また、各見出しに対応したcommitがmasterブランチに存在するので、それぞれの部分までの途中経過も確認できます。</p>
 
-<h1>プロジェクトの作成</h1>
+<h1>1.プロジェクトの作成</h1>
 
 <p>以下の設定でAndroid Studioから新規にプロジェクトを作成します。</p>
 
@@ -186,7 +186,7 @@ sup {
 
 <p>また、この段階でアプリが実行できることを確認してください。</p>
 
-<h1>Realmのセットアップ</h1>
+<h1>2.Realmのセットアップ</h1>
 
 <p>Gradleプラグインを適用することで、Realmが使用できるようにします。</p>
 
@@ -253,9 +253,11 @@ dependencies {
 
 <p>アプリのとしては変化はありあせんが、これによりRealmを使用する準備が整いました。</p>
 
-<h1>タイムライン表示の作成</h1>
+<h1>3.タイムライン表示の作成</h1>
 
 <p>ここからしばらくはTwitterの表示部分の実装を進めていきます。</p>
+
+<h2>3.1 レイアウトファイルの作成</h2>
 
 <p><code>app/main/res/layout/activity_main.xml</code>を開き、もとの記述を削除した後ViewPagerとPagerTitleStripを配置します。</p>
 
@@ -330,6 +332,8 @@ dependencies {
 <p><img src="./listitem.png" alt="image" /></p>
 
 <p>レイアウトは　以上で準備完了です。以降でJavaのコードを記述していきます。</p>
+
+<h2>3.2 Javaコード</h2>
 
 <p>ViewPagerの中身となるFragmentとして、<code>app/main/src/java/</code>に<code>io.realm.handson2.twitter.TimelineFragment</code>クラスを以下のように作成します。現状では、</p>
 
@@ -421,7 +425,9 @@ public class TimelineFragment extends ListFragment {
         pager.setAdapter(new MainPagerAdapter(getSupportFragmentManager()));
 </code></pre>
 
-<h1>Twitter4Jのセットアップ</h1>
+<h1>4.Twitter4Jのセットアップ</h1>
+
+<h2>4.1 Twitter4Jを追加</h2>
 
 <p>まず、Twitter4jを使えるようにします。</p>
 
@@ -459,6 +465,8 @@ dependencies {
 </code></pre>
 
 <p><code>Tools &gt; Android &gt; Sync Project with Gradle Files</code> を実行してください。</p>
+
+<h2>4.2 ユーティリティクラスの作成</h2>
 
 <p><code>TwitterAuthUtil</code>クラスを以下のように作成します。このクラスは、認証に必要な情報をSharedPreferencesに保存する等のサポートクラスです。</p>
 
@@ -538,6 +546,8 @@ public final class TwitterAuthUtil {
 }
 </code></pre>
 
+<h2>4.3 アプリケーションクラスでの初期化</h2>
+
 <p><code>MyApplication</code>クラスを作成し、ユーティリティクラスとTwitter4Jの初期化を行います。<code>&lt;consumerKey&gt;</code>と<code>&lt;consumerSecret&gt;</code>の部分は各自のものに置き換えてください。取得方法はコードの後で説明します。</p>
 
 <pre><code>package io.realm.handson2.twitter;
@@ -572,6 +582,8 @@ public class MyApplication extends Application {
 (省略)
 </code></pre>
 
+<h2>4.4 コンシューマーキーの入手</h2>
+
 <p><code>&lt;consumerKey&gt;</code>と<code>&lt;consumerSecret&gt;</code>を入手するため、<a href="https://apps.twitter.com/">https://apps.twitter.com/</a>にアクセスし、<code>Create New App</code>をします。</p>
 
 <p>以下の設定で作成してください。<code>Callback URL</code>は画面上は必須ではないですが、空にしておくとアプリからの認証が通らなくなるので何らかの有効なURLを入力してください。</p>
@@ -594,9 +606,11 @@ public class MyApplication extends Application {
 
 <p>作成完了後、<code>manage keys and access tokens</code>のリンクをクリックして表示された画面から<code>&lt;consumerKey&gt;</code>と<code>&lt;consumerSecret&gt;</code>を入手し先ほどの<code>MyApplication</code>クラスで渡してください。</p>
 
-<h1>ログイン画面の作成</h1>
+<h1>5.ログイン画面の作成</h1>
 
 <p>次にログイン画面を作成します。</p>
+
+<h2>5.1 ログインボタン画面</h2>
 
 <p>認証されていない状態でアプリが起動されるとログインボタンのみの画面を表示し、ボタンが押されたらブラウザを起動して認証を行い、その結果を受け取ることでログインを完了させます。</p>
 
@@ -724,6 +738,8 @@ public class LoginActivity extends AppCompatActivity {
 &lt;/manifest&gt;
 </code></pre>
 
+<h1>5.2 コールバック画面</h1>
+
 <p>ブラウザから結果を受け取り画面を作成します。中央にプログレス、その下にメッセージがあるだけの画面です。</p>
 
 <p><img src="./callback.png" alt="image" /></p>
@@ -839,7 +855,9 @@ public class CallbackActivity extends AppCompatActivity {
 
 <p>ここまで正常に完了すると、初回起動時はログイン画面が表示され、ログインに成功するとタイムライン画面に遷移します。一度認証が成功すると、以降の起動ははじめからタイムライン画面が表示されます。</p>
 
-<h1>Realmの初期化とモデル定義</h1>
+<h1>6.Realmの初期化とモデル定義</h1>
+
+<h2>6.1 初期化</h2>
 
 <p><code>MyApplication#onCreate()</code>で、<code>RealmConfiguration</code>を作成しデフォルトの設定としてセットします。</p>
 
@@ -847,6 +865,8 @@ public class CallbackActivity extends AppCompatActivity {
 </code></pre>
 
 <p>Realmファイルを１つしか使用しない場合は、このようにデフォルト設定としてセットしておくことで利用時に簡単に<code>Realm</code>インスタンスを取得できるようになります。</p>
+
+<h2>6.2 モデル定義</h2>
 
 <p>次に、Realmにデータを格納する際のデータ構造を定義するクラスを作成します。Realmではこのようなクラスをモデルクラスと呼んでいます。</p>
 
@@ -901,7 +921,7 @@ public class Tweet extends RealmObject {
 
 <p>フィールドに使用できる型には制限があります。詳細は<a href="https://realm.io/jp/docs/java/latest/#section-6">対応しているデータ型</a>を参照してください。</p>
 
-<h1>タイムラインの読み込みとRealmへの格納</h1>
+<h1>7.タイムラインの読み込みとRealmへの格納</h1>
 
 <p>今回のアプリでは、ツイッターから取得したデータは一旦すべてRealmに格納し、表示はRealmから取り出すようにします。</p>
 
@@ -993,7 +1013,7 @@ public class UpdateService extends IntentService {
     }
 </code></pre>
 
-<h1>Realmからの読み込み</h1>
+<h1>8.Realmからの読み込み</h1>
 
 <p><code>TimelineFragment</code>の実装を修正して実際にデータベースからの読み込みを行います。</p>
 
@@ -1046,7 +1066,9 @@ public class UpdateService extends IntentService {
     }
 </code></pre>
 
-<h1>重複排除と時間順での並べ替え</h1>
+<h1>9.重複排除と時間順での並べ替え</h1>
+
+<h2>9.1 プライマリキーと発言時間をモデルクラスに追加</h2>
 
 <p>今のままでは、起動するたびにタイムラインからデータベースに直近の20件が書き込まれていきますが、重複したものもそのまま追加されてしまいます。また、発言の表示順も保証されない状態です。この点を修正していきます。</p>
 
@@ -1172,13 +1194,17 @@ public class Tweet extends RealmObject {
 }
 </code></pre>
 
+<h2>9.2 上書き処理</h2>
+
 <p>プライマリーキーを追加したので、プライマリーキーが同じデータが既に存在する場合には追加ではなく更新を行うように修正します。</p>
 
 <p><code>UpdateService</code>を開き、データを保存する部分の<code>realm.copyToRealm(tweet);</code>を<code>realm.copyToRealmOrUpdate(tweet);</code>に変更します。前者は重複があるとエラーになりますが、後者は新しいデータで上書きします。</p>
 
 <p>これで発言の重複は発生しなくなりました。次に表示順序を修正します。</p>
 
-<p><code>TimelineFragment</code>を開き、データを取得すr部分コードを修正します。今回単に順序を正しくするだけではなく、今後に備えてデータの取得部分をメソッドとして抽出しておきます。</p>
+<h2>9.3 ソート</h2>
+
+<p><code>TimelineFragment</code>を開き、データを取得する部分コードを修正します。今回単に順序を正しくするだけではなく、今後に備えてデータの取得部分をメソッドとして抽出しておきます。</p>
 
 <p>まず<code>realm.allObjects(Tweet.class);</code>の部分を<code>realm.allObjectsSorted(Tweet.class, "createdAt", Sort.DESCENDING);</code>に書き換えます。俺により、<code>createdAt</code>フィールドの値の降順で表示されるようになります。さらにこの部分を以下の様なメソッドとして抽出します。可視性が<code>protected</code>であることと、引き数に<code>Realm</code>を渡していることに注意してください。
 <code>
@@ -1188,11 +1214,15 @@ public class Tweet extends RealmObject {
     }
 </code></p>
 
-<h1>ふぁぼリストの追加</h1>
+<h1>10.ふぁぼリストの追加</h1>
 
 <p>これまで画面にはタイムラインのみを表示していましたが、favoritedな発言を集めたリストを追加します。</p>
 
+<h2>10.1 マイグレーションの準備</h2>
+
 <p>まず、favoritedかどうかを保持するフィールドが必要になるので、<code>Tweet</code>クラスを修正しますが、今回は既存のデータを残すようマイグレーションも記述します。そのための準備として、先ほど追加した<code>.deleteRealmIfMigrationNeeded()</code>を取り除き<code>Realm.setDefaultConfiguration(new RealmConfiguration.Builder(this).build());</code>に戻します(<code>MyApplication</code>クラス)。</p>
+
+<h2>10.2 favoritedフィールド追加</h2>
 
 <p><code>id</code>を追加したときと同様に、<code>Tweet</code>クラスに<code>boolean</code>型のフィールド<code>favorited</code>とそのgetter/setter、コンストラクタでの読み出しコードを追加してください。読み出しは以下のとおりです。</p>
 
@@ -1281,6 +1311,8 @@ public class Tweet extends RealmObject {
 }
 </code></pre>
 
+<h2>10.3 マイグレーション</h2>
+
 <p>次にマイグレーションを実装します。</p>
 
 <p>マイグレーションは<code>RealmConfiguration</code>を作成するのビルダーに、一緒に指定します。</p>
@@ -1330,6 +1362,8 @@ public class Tweet extends RealmObject {
                 .build();
     }
 </code></pre>
+
+<h2>10.4 favoritedリストのためのフラグメント作成</h2>
 
 <p>favoritedなリストのためのフラグメント<code>FavoritedFragment</code>を以下のように作成します。<code>TimelineFragment</code>を継承して簡単に実装できました。</p>
 
@@ -1406,9 +1440,11 @@ public class FavoritedFragment extends TimelineFragment {
     }
 </code></pre>
 
-<h1>ふぁぼの背景色変更</h1>
+<h1>11.ふぁぼの背景色変更</h1>
 
 <p>この部分はRealmとは直接は関係のない作業です。</p>
+
+<h2>11.1 状態に応じてListのアイテムの背景が変わるようにする</h2>
 
 <p>まず、Listアイテムの<code>checked</code>状態に応じて背景色を変えてくれる機能を持った<code>RelativeLayout</code>クラスである<code>CheckableRelativeLayout</code>クラスを以下のように作成します。</p>
 
@@ -1520,6 +1556,8 @@ public class CheckableRelativeLayout extends RelativeLayout implements Checkable
 &lt;/io.realm.handson2.twitter.CheckableRelativeLayout&gt;
 </code></pre>
 
+<h2>11.2 状態反映</h2>
+
 <p>最後に、<code>TimelineFragment</code>でfavoritedなものを<code>checked</code>状態にする修正を行います。<code>FavoritedFragment</code>は<code>TimelineFragment</code>を継承しているので、<code>TimelineFragment</code>を修正すれば両方に反映されます。</p>
 
 <p><code>TimelineFragment#onVireCreated()</code>に以下のコードを追加し、<code>ListView</code>を複数選択モードにします。</p>
@@ -1569,7 +1607,7 @@ public class CheckableRelativeLayout extends RelativeLayout implements Checkable
     }
 </code></pre>
 
-<h1>ふぁぼ状態変更</h1>
+<h1>12.ふぁぼ状態変更</h1>
 
 <p>リストをタップしてfavoritedの状態を変更できるようにします。リストは2つありますが、どちらをタップしても双方に反映されます。</p>
 
@@ -1589,7 +1627,7 @@ public class CheckableRelativeLayout extends RelativeLayout implements Checkable
         });
 </code></pre>
 
-<h1>アイコン読み込み</h1>
+<h1>13.アイコン読み込み</h1>
 
 <p>Picassoを使ってアイコンを読み込みます。</p>
 
@@ -1654,7 +1692,7 @@ public class CheckableRelativeLayout extends RelativeLayout implements Checkable
     }
 </code></pre>
 
-<h1>更新ボタン追加</h1>
+<h1>14.更新ボタン追加</h1>
 
 <p>このままではツイートが更新できないので、更新ボタンを追加します(実際には画面回転すれば更新できますが...)。</p>
 
