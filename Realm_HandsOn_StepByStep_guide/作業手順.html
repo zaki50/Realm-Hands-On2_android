@@ -174,13 +174,13 @@ sup {
 </dl>
 
 
-<p><img src="./new_project.png" alt="image" /></p>
+<p><img src="./images/new_project.png" alt="image" /></p>
 
 <p>プロジェクトを作成したら、左上のProject Viewを<code>Android</code>から<code>Project</code>へ変更します。こうすることで、実際のディレクトリ構成と一致した状態で表示することができます。</p>
 
-<p><img src="./to_Project.png" alt="image" /></p>
+<p><img src="./images/to_Project.png" alt="image" /></p>
 
-<p><img src="./project_view.png" alt="image" /></p>
+<p><img src="./images/project_view.png" alt="image" /></p>
 
 <p>この状態で、一旦 <code>Tools &gt; Android &gt; Sync Project with Gradle Files</code> を実行し、エラーなくビルドできることを確認します。</p>
 
@@ -329,7 +329,7 @@ dependencies {
 &lt;/RelativeLayout&gt;
 </code></pre>
 
-<p><img src="./listitem.png" alt="image" /></p>
+<p><img src="./images/listitem.png" alt="image" /></p>
 
 <p>レイアウトは　以上で準備完了です。以降でJavaのコードを記述していきます。</p>
 
@@ -588,6 +588,8 @@ public class MyApplication extends Application {
 
 <p>以下の設定で作成してください。<code>Callback URL</code>は画面上は必須ではないですが、空にしておくとアプリからの認証が通らなくなるので何らかの有効なURLを入力してください。</p>
 
+<p><strong>Nameに関しては既存のものとの重複が許されないので各自で適当に変更してください。</strong></p>
+
 <dl>
   <dt>Name</dt>
   <dd>RealmHandsOn</dd>
@@ -604,7 +606,7 @@ public class MyApplication extends Application {
 </dl>
 
 
-<p>作成完了後、<code>manage keys and access tokens</code>のリンクをクリックして表示された画面から<code>&lt;consumerKey&gt;</code>と<code>&lt;consumerSecret&gt;</code>を入手し先ほどの<code>MyApplication</code>クラスで渡してください。</p>
+<p>作成完了後、<code>manage keys and access tokens</code>のリンクをクリックして表示された画面から<code>&lt;consumerKey&gt;</code>と<code>&lt;consumerSecret&gt;</code>を入手し先ほどの<code>MyApplication</code>クラスの文字列を置き換えてください。</p>
 
 <h1>5.ログイン画面の作成</h1>
 
@@ -614,7 +616,7 @@ public class MyApplication extends Application {
 
 <p>認証されていない状態でアプリが起動されるとログインボタンのみの画面を表示し、ボタンが押されたらブラウザを起動して認証を行い、その結果を受け取ることでログインを完了させます。</p>
 
-<p><img src="./login.png" alt="image" /></p>
+<p><img src="./images/login.png" alt="image" /></p>
 
 <p>Twitterのログインはブラウザを使用するので、画面はとてもシンプルです。中央にLOGINと書かれたボタンが一つおかれた画面を<code>app/main/res/layout/activity_login.xml</code>として作成してください。</p>
 
@@ -685,7 +687,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void executeLogin() {
-        new AsyncTask&lt;Void, Void, Void&gt;() {
+        new AsyncTask&lt;Void, Throwable, Void&gt;() {
             @Override
             protected Void doInBackground(Void... params) {
                 TwitterAuthUtil.clearTokens();
@@ -697,9 +699,18 @@ public class LoginActivity extends AppCompatActivity {
                     TwitterAuthUtil.saveRequestToken(requestToken);
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(authUrl)));
                 } catch (TwitterException e) {
-                    throw new RuntimeException(e);
+                    Log.e("RealmTwitter", "通信でエラーが発生しました: " + e.getMessage());
+                    publishProgress(e);
                 }
                 return null;
+            }
+
+            @Override
+            protected void onProgressUpdate(Throwable... values) {
+                super.onProgressUpdate(values);
+
+                Toast.makeText(CallbackActivity.this,
+                        "通信でエラーが発生しました: " + values[0].getMessage(), Toast.LENGTH_LONG).show();
             }
         }.execute();
     }
@@ -742,7 +753,9 @@ public class LoginActivity extends AppCompatActivity {
 
 <p>ブラウザから結果を受け取り画面を作成します。中央にプログレス、その下にメッセージがあるだけの画面です。</p>
 
-<p><img src="./callback.png" alt="image" /></p>
+<p><img src="./images/callback.png" alt="image" /></p>
+
+<p>以下の内容で<code>app/main/res/layout/activity_callback.xml</code>を作成してください。</p>
 
 <pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;RelativeLayout
@@ -812,7 +825,7 @@ public class CallbackActivity extends AppCompatActivity {
             return;
         }
 
-        new AsyncTask&lt;Void, Void, Void&gt;() {
+        new AsyncTask&lt;Void, Throwable, Void&gt;() {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
@@ -822,9 +835,18 @@ public class CallbackActivity extends AppCompatActivity {
                     TwitterAuthUtil.saveAccessToken(accessToken);
                     startMainActivity();
                 } catch (TwitterException e) {
-                    throw new RuntimeException(e);
+                    Log.e("RealmTwitter", "通信でエラーが発生しました: " + e.getMessage());
+                    publishProgress(e);
                 }
                 return null;
+            }
+
+            @Override
+            protected void onProgressUpdate(Throwable... values) {
+                super.onProgressUpdate(values);
+
+                Toast.makeText(CallbackActivity.this,
+                        "通信でエラーが発生しました: " + values[0].getMessage(), Toast.LENGTH_LONG).show();
             }
         }.execute();
     }
@@ -1090,7 +1112,7 @@ public class UpdateService extends IntentService {
     private long id;
     private Date createdAt;
 
-        public long getId() {
+    public long getId() {
         return id;
     }
 
@@ -1130,7 +1152,6 @@ public class Tweet extends RealmObject {
     private String screenName;
     private String text;
     private String iconUrl;
-    private boolean favorited;
 
     public Tweet() {
     }
@@ -1141,7 +1162,6 @@ public class Tweet extends RealmObject {
         setScreenName(status.getUser().getScreenName());
         setText(status.getText());
         setIconUrl(status.getUser().getProfileImageURLHttps());
-        setFavorited(status.isFavorited());
     }
 
     public long getId() {
@@ -1182,14 +1202,6 @@ public class Tweet extends RealmObject {
 
     public void setIconUrl(String iconUrl) {
         this.iconUrl = iconUrl;
-    }
-
-    public boolean isFavorited() {
-        return favorited;
-    }
-
-    public void setFavorited(boolean favorited) {
-        this.favorited = favorited;
     }
 }
 </code></pre>
@@ -1373,19 +1385,9 @@ public class Tweet extends RealmObject {
 
 <pre><code>package io.realm.handson2.twitter;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ListFragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import io.realm.Realm;
-import io.realm.RealmBaseAdapter;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import io.realm.handson2.twitter.entity.Tweet;
@@ -1732,6 +1734,39 @@ public class CheckableRelativeLayout extends RelativeLayout implements Checkable
     }
 </code></pre>
 
+<h1>15.応用編</h1>
+
+<p>余裕のある人は以下のことにも挑戦してみてください。</p>
+
+<h2>15.1 Realm関連の機能追加</h2>
+
+<p>Realmに関連する機能追加として以下を実装してみましょう。以下の公式ドキュメントがあるので必要に応じて参照してください。</p>
+
+<p>http://realm.io/jp/docs/java/latest/</p>
+
+<ul>
+<li>リスト用のタブを追加してみましょう。</li>
+<li>任意の文字列でのローカル検索を実装してみましょう。その際、Realmが提供する非同期クエリのAPIを使用してみましょう。</li>
+<li>favoriteに追加した際、twitter APIを使用してサーバーにも送信してみましょう。その際、通信が失敗してもローカルのデータベースと内容の食い違いが発生しないように気をつけてください。</li>
+<li>Twitter認証の際にSharedPreferencesを使用していますが、これをRealmに置き換えてみましょう。その際、ツイートと別のデータベースファイルを使用し、暗号化も有効にしてみましょう。</li>
+</ul>
+
+
+<h2>15.2 Twitterアプリとしての機能追加</h2>
+
+<p>Realmの機能には関係しないですが、Twitterアプリとして幾つか不足している機能を実装してみましょう。</p>
+
+<ul>
+<li><code>RealmBaseAdapter</code>を継承したクラスで<code>ViewHolderパターン</code>を使用するように実装を修正しましょう。</li>
+<li>ツイートできるようにしてみましょう。</li>
+<li>更新をSwipeRefresh(引っ張って更新)に対応させましょう。</li>
+<li>直近20件だけでなく、それよりも古いteetを取得できるようにしましょう。</li>
+<li>ストリーミングAPIに対応させ、常に最新のtweetを表示させましょう。</li>
+</ul>
+
+
 <p>以上です！</p>
+
+<p>このドキュメントはMarkdownで記述したものをMouでHTMLとpdfに変換しました。</p>
 </body>
 </html>
